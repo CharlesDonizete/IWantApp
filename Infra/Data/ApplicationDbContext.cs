@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IWantApp.Domain.Products;
 using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IWantApp.Infra.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     public DbSet<Product> Products { get; set; }
