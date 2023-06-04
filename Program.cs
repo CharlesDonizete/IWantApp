@@ -4,7 +4,7 @@ using IWantApp.Endpoints.Scurity;
 using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -19,7 +19,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthorization();
+builder.Services.AddScoped<QueryAllUsersWithClaimName>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+      .RequireAuthenticatedUser()
+      .Build();
+});
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,14 +46,14 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddScoped<QueryAllUsersWithClaimName>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
