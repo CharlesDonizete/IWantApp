@@ -10,11 +10,11 @@ public class EmployeePost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(EmployeeRequest employeeRequest, HttpContext http, UserManager<IdentityUser> userManager)
+    public static async Task<IResult> Action(EmployeeRequest employeeRequest, HttpContext http, UserManager<IdentityUser> userManager)
     {
         var userId = http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var newUser = new IdentityUser { UserName = employeeRequest.Email, Email = employeeRequest.Email };
-        var result = userManager.CreateAsync(newUser, employeeRequest.Password).Result;
+        var result = await userManager.CreateAsync(newUser, employeeRequest.Password);
 
         if(!result.Succeeded)
             return Results.ValidationProblem(result.Errors.ConvertToProblemDetails());
@@ -26,7 +26,7 @@ public class EmployeePost
             new Claim("CreatedBy", userId)
         };
 
-        var clainResult = userManager.AddClaimsAsync(newUser, userClaims).Result;
+        var clainResult = await userManager.AddClaimsAsync(newUser, userClaims);
 
         if(!clainResult.Succeeded)
             return Results.BadRequest(result.Errors.First());       
