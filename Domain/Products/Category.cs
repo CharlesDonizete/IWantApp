@@ -19,10 +19,12 @@ public class Category : Entity
     public string Name { get; private set; }
     public bool Active { get; private set; }
 
-    public void EditInfo(string name, bool active)
+    public void EditInfo(string name, bool active, string editedBy)
     {
         Active = active;
         Name = name;
+        EditedBy = editedBy;
+        EditedOn = DateTime.Now;
         Validate();
     }
     private void Validate()
