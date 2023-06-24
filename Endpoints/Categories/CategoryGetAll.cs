@@ -10,7 +10,7 @@ public class CategoryGetAll
     public static IResult Action(ApplicationDbContext context)
     {
         var categories = context.Categories.ToList();
-        var respose = categories.Select(c => new CategoryResponse { Id = c.Id, Name = c.Name, Active = c.Active });
+        var respose = categories.Select(c => new CategoryResponse(c.Id, c.Name, c.Active));
 
         return Results.Ok(respose);
     }
