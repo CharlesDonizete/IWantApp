@@ -1,16 +1,15 @@
 using IWantApp.Endpoints.Categories;
-using IWantApp.Endpoints.Employees;
 using IWantApp.Endpoints.Scurity;
-using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:IWantDb"]);
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
 { 
@@ -33,6 +32,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("EmployeePolicy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
     options.AddPolicy("Employee005Policy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode", "005"));
 });
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -78,6 +78,19 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+});
+
+builder.WebHost.UseSerilog((context, configuration) => {
+    configuration
+        .WriteTo.Console()
+        .WriteTo.MSSqlServer(
+            connectionString: context.Configuration["ConnectionString:IWantDb"],
+            sinkOptions: new MSSqlServerSinkOptions
+            {
+                AutoCreateSqlTable = true,
+                TableName = "LogAPI"
+            }
+        );
 });
 
 var app = builder.Build();
