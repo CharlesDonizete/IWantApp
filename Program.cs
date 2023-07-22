@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,6 +125,8 @@ app.Map("/error", (HttpContext http) =>
     if (error != null)
         if (error.InnerException is SqlException)
             return Results.Problem(title: "Database out", statusCode: 500);
+        else if (error.InnerException is JsonException)
+            return Results.Problem(title: "Error to convert data to other type. See all the information sent", statusCode: 500);
 
     return Results.Problem(title: "An error ocurred", statusCode: 500);
 });
