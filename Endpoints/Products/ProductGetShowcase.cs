@@ -7,18 +7,29 @@ public class ProductGetShowcase
     public static Delegate Handle => Action;
 
     [AllowAnonymous]
-    public static async Task<IResult> Action(int? page, int? row, string? orderBy, ApplicationDbContext context)
+    public static async Task<IResult> Action(ApplicationDbContext context, int page = 1, int row = 10, string orderBy = "name")
     {
-        if (page == null) page = 1;
-        if (row == null) row = 10;
-        if (string.IsNullOrEmpty(orderBy)) orderBy = "name";
+        if (row > 10) return Results.Problem(title: "Row with max 10", statusCode: 400);
 
         var queryBase = context.Products.Include(p => p.Category)
             .Where(p => p.HasStock && p.Category.Active);
 
         queryBase = orderBy == "name" ? queryBase.OrderBy(p => p.Name) : queryBase.OrderBy(p => p.Price);
 
-        var queryFilter = queryBase.Skip((page.Value - 1) * row.Value).Take(row.Value);
+        switch (orderBy)
+        {
+            case "name":
+                queryBase.OrderBy(p => p.Name);
+                break;
+            case "price":
+                queryBase.OrderBy(p => p.Price);
+                break;
+            default:
+                return Results.Problem(title: "Order only by price or name", statusCode: 400);                
+        }
+
+
+        var queryFilter = queryBase.Skip((page - 1) * row).Take(row);
 
         var products = await queryFilter.ToArrayAsync();
 
