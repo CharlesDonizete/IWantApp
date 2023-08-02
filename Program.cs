@@ -1,4 +1,3 @@
-using IWantApp.Endpoints.Categories;
 using IWantApp.Endpoints.Products;
 using IWantApp.Endpoints.Scurity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -118,6 +117,8 @@ app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handle);
 app.MapMethods(ProductGetById.Template, ProductGetAll.Methods, ProductGetById.Handle);
 app.MapMethods(ProductGetShowcase.Template, ProductGetShowcase.Methods, ProductGetShowcase.Handle);
+app.MapMethods(ClientPost.Template, ClientPost.Methods, ClientPost.Handle);
+
 
 app.UseExceptionHandler("/error");
 app.Map("/error", (HttpContext http) =>
