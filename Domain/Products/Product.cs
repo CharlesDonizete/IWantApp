@@ -29,6 +29,8 @@ public class Product : Entity
     public bool HasStock { get; private set; }
     public bool Active { get; private set; } = true;
     public decimal Price { get; private set; }
+    public ICollection<Order> Orders { get; internal set; }
+
     private void Validate()
     {
         var contract = new Contract<Product>()
