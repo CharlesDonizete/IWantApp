@@ -11,6 +11,8 @@ using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:IWantDb"]);
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMysql(builder.Configuration["ConnectionString:IWantDb"]);
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
 { 
     options.Password.RequireNonAlphanumeric = false; 

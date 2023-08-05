@@ -1,5 +1,4 @@
 ﻿using IWantApp.Domain.Users;
-using IWantApp.Endpoints.Clients;
 
 namespace IWantApp.Endpoints.Clients;
 
@@ -19,10 +18,11 @@ public class ClientPost
             new Claim("Name", clientRequest.Name)
         };
 
-        (IdentityResult identity, string userId) result = await userCreator.Create(clientRequest.Email, clientRequest.Password, userClaims);
+        (IdentityResult identity, string userId) result
+            = await userCreator.Create(clientRequest.Email, clientRequest.Password, userClaims);
 
         if (!result.identity.Succeeded)
-            return Results.ValidationProblem(result.identity.Errors.ConvertToProblemDetails());        
+            return Results.ValidationProblem(result.identity.Errors.ConvertToProblemDetails());
 
         return Results.Created($"/clients/{result.userId}", result.userId);
     }
