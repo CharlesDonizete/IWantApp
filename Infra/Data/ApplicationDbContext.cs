@@ -26,6 +26,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .Property(o => o.ClientId).IsRequired();
         builder.Entity<Order>()
             .Property(o => o.DeliveryAddress).IsRequired();
+        builder.Entity<Order>()
+            .Property(p => p.Total).HasColumnType("decimal(10,2)");
 
         builder.Entity<Order>()
             .HasMany(o => o.Products)

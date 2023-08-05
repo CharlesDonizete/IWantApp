@@ -14,7 +14,7 @@ public class ProductGetById
         var product = await context.Products.Include(p => p.Category).Where(p => p.Id == id).SingleOrDefaultAsync();
         if (product != null)
         {
-            var results = new ProductResponse(product.Name, product.Category.Name, product.Description, product.HasStock, product.Price, product.Active);
+            var results = new ProductResponse(product.Id, product.Name, product.Category.Name, product.Description, product.HasStock, product.Price, product.Active);
             return Results.Ok(results);
         }
         return Results.BadRequest();

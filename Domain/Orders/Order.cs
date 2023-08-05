@@ -9,11 +9,10 @@ public class Order : Entity
 
     public Order() { }
 
-    public Order(string clientId, string clientName, List<Product> products, decimal total, string deliveryAddress)
+    public Order(string clientId, string clientName, List<Product> products, string deliveryAddress)
     {
         ClientId = clientId;
-        Products = products;
-        Total = total;
+        Products = products;        
         DeliveryAddress = deliveryAddress;
         CreatedBy = clientName;
         EditedBy = clientName;
