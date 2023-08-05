@@ -1,4 +1,4 @@
-using IWantApp.Endpoints.Products;
+
 using IWantApp.Endpoints.Scurity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -8,8 +8,6 @@ using Serilog.Sinks.MSSqlServer;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:IWantDb"]);
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
@@ -118,7 +116,6 @@ app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Hand
 app.MapMethods(ProductGetById.Template, ProductGetAll.Methods, ProductGetById.Handle);
 app.MapMethods(ProductGetShowcase.Template, ProductGetShowcase.Methods, ProductGetShowcase.Handle);
 app.MapMethods(ClientPost.Template, ClientPost.Methods, ClientPost.Handle);
-
 
 app.UseExceptionHandler("/error");
 app.Map("/error", (HttpContext http) =>
