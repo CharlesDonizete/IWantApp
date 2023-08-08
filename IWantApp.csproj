@@ -29,6 +29,7 @@
     <Using Include="IWantApp.Endpoints.Clients" />
     <Using Include="IWantApp.Endpoints.Products;" />
     <Using Include="IWantApp.Domain.Orders" />
+    <Using Include="IWantApp.Endpoints.Orders;" />
   </ItemGroup>
   
   <ItemGroup>
