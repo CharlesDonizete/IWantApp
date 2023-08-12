@@ -6,7 +6,7 @@ public class EmployeeGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    [Authorize(Policy = "Employee005Policy")]
+    [Authorize(Policy = "EmployeePolicy")]
     public static async Task<IResult> Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
         if (page == null)
